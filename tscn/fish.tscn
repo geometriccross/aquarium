@@ -1,3 +1,16 @@
-[gd_scene format=3 uid="uid://wirldjvxh2ky"]
+[gd_scene load_steps=3 format=3 uid="uid://wirldjvxh2ky"]
+
+[ext_resource type="Texture2D" uid="uid://brqa1a6kncvb6" path="res://image/ゆ.svg" id="1_siun8"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ksaok"]
+radius = 42.0
+height = 86.0
 
 [node name="fish" type="Area2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = 4.71239
+shape = SubResource("CapsuleShape2D_ksaok")
+
+[node name="ゆ" type="Sprite2D" parent="."]
+texture = ExtResource("1_siun8")
