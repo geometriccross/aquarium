@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://hqujxnhibn6h"]
+
+[ext_resource type="Script" path="res://src/sensor.gd" id="1_3kdom"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_86jeq"]
+
+[node name="sensor" type="Area2D"]
+script = ExtResource("1_3kdom")
+
+[node name="near" type="CollisionShape2D" parent="."]
+position = Vector2(10, 0)
+shape = SubResource("CapsuleShape2D_86jeq")
+
+[node name="ray_top" type="RayCast2D" parent="."]
+rotation = -0.785398
+target_position = Vector2(80, 0)
+
+[node name="ray_mid" type="RayCast2D" parent="."]
+target_position = Vector2(100, 0)
+
+[node name="ray_bottom" type="RayCast2D" parent="."]
+rotation = 0.785398
+target_position = Vector2(80, 0)
