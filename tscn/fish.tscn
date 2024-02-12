@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://ytk41imemgoh"]
 
-[ext_resource type="Script" path="res://src/fish/brain.gd" id="1_8bj6d"]
+[ext_resource type="Script" path="res://src/fish/fish_control.gd" id="1_8bj6d"]
 [ext_resource type="Texture2D" uid="uid://brqa1a6kncvb6" path="res://image/ゆ.svg" id="1_siun8"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_eq3s0"]

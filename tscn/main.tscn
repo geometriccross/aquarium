@@ -1,3 +1,8 @@
-[gd_scene format=3 uid="uid://ct5qu3seilaqx"]
+[gd_scene load_steps=2 format=3 uid="uid://ct5qu3seilaqx"]
+
+[ext_resource type="PackedScene" uid="uid://ytk41imemgoh" path="res://tscn/fish.tscn" id="1_otopm"]
 
 [node name="main" type="Node2D"]
+
+[node name="fish" parent="." instance=ExtResource("1_otopm")]
+position = Vector2(562, 285)
