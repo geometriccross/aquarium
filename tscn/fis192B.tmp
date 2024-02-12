@@ -8,7 +8,7 @@ radius = 40.0
 height = 92.0
 
 [node name="fish" type="RigidBody2D"]
-gravity_scale = 0.06
+gravity_scale = 0.0
 script = ExtResource("1_8bj6d")
 
 [node name="ゆ" type="Sprite2D" parent="."]
