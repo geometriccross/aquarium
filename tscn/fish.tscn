@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://ytk41imemgoh"]
 
-[ext_resource type="Script" path="res://src/fish/fish_control.gd" id="1_pjfm3"]
+[ext_resource type="Script" path="res://src/fish.gd" id="1_nmrwm"]
 [ext_resource type="Texture2D" uid="uid://brqa1a6kncvb6" path="res://image/ゆ.svg" id="1_siun8"]
 [ext_resource type="PackedScene" uid="uid://hqujxnhibn6h" path="res://tscn/sensor.tscn" id="3_tvejb"]
 
@@ -10,7 +10,7 @@ height = 92.0
 
 [node name="fish" type="RigidBody2D"]
 gravity_scale = 0.06
-script = ExtResource("1_pjfm3")
+script = ExtResource("1_nmrwm")
 
 [node name="ゆ" type="Sprite2D" parent="."]
 texture = ExtResource("1_siun8")
@@ -19,12 +19,15 @@ texture = ExtResource("1_siun8")
 rotation = -1.5708
 shape = SubResource("CapsuleShape2D_eq3s0")
 
-[node name="eye_sensor" parent="." instance=ExtResource("3_tvejb")]
-position = Vector2(32, 0)
+[node name="front_sensor" parent="." instance=ExtResource("3_tvejb")]
+position = Vector2(48, 0)
 
 [node name="top_sensor" parent="." instance=ExtResource("3_tvejb")]
-position = Vector2(0, -30)
+position = Vector2(0, -42)
 rotation = -1.57079
+
+[node name="near_area" parent="top_sensor" index="0"]
+position = Vector2(8, -1.77701e-05)
 
 [node name="ray_top" parent="top_sensor" index="1"]
 target_position = Vector2(50, 0)
@@ -36,8 +39,11 @@ target_position = Vector2(55, -0.00012217)
 target_position = Vector2(50, 0)
 
 [node name="low_sensor" parent="." instance=ExtResource("3_tvejb")]
-position = Vector2(0, 22)
+position = Vector2(0, 42)
 rotation = 1.57079
+
+[node name="near_area" parent="low_sensor" index="0"]
+position = Vector2(8, 1.77701e-05)
 
 [node name="ray_top" parent="low_sensor" index="1"]
 target_position = Vector2(40, 0)
@@ -48,5 +54,6 @@ target_position = Vector2(40, 0)
 [node name="ray_low" parent="low_sensor" index="3"]
 target_position = Vector2(40, 0)
 
+[editable path="front_sensor"]
 [editable path="top_sensor"]
 [editable path="low_sensor"]
