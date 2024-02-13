@@ -12,8 +12,7 @@ extends RigidBody2D
 
 var _time := 0.0
 
-#左から順にnoraml, escape, focusへと移る確率をあらわした、
-#行動のテーブル
+#左から順にnoraml, escape, focusへと移る確率をあらわした、行動のテーブル
 var behavior_table := {
 	"random": [0.8, 0, 0.2],
 	"escape": [0.3, 0.7, 0],
