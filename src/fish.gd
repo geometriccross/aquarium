@@ -11,12 +11,15 @@ extends RigidBody2D
 @export var move_speed := 400
 
 var _time := 0.0
+var _RANDOM = "random"
+var _ESCAPE = "escape"
+var _FOCUS = "focus"
 
 #左から順にnoraml, focus, escapeへと移る確率をあらわした、行動のテーブル
 var _behavior_table := {
-	"random": [[0.8, random_walk], [0.2, focus_walk], [0, escape_walk]],
-	"escape": [[0.3, random_walk], [0, focus_walk], [0.7, escape_walk]],
-	"focus": [[0.33, random_walk], [0.33, focus_walk], [0.33, escape_walk]]
+	_RANDOM: [[0.8, random_walk], [0.2, focus_walk], [0, escape_walk]],
+	_ESCAPE: [[0.3, random_walk], [0, focus_walk], [0.7, escape_walk]],
+	_FOCUS: [[0.33, random_walk], [0.33, focus_walk], [0.33, escape_walk]]
 }
 
 const utility = preload("res://src/utility.gd")
@@ -32,7 +35,7 @@ func _physics_process(delta):
 
 func behavior_choice(state: String, table: Dictionary) -> Array:
 	var p = round(randf_range(0, 1.0))
-	var result = ["random", utility.id]
+	var result = [_RANDOM, utility.id]
 	#行動の確率がすべて同じであった場合、起きる行動が毎回同じになってしまう。
 	#テーブルの並びをランダムにすることでこれに対応した
 	for percent in table[state].shuffle(): 
