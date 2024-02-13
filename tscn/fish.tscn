@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://src/fish.gd" id="1_nmrwm"]
 [ext_resource type="Texture2D" uid="uid://brqa1a6kncvb6" path="res://image/ゆ.svg" id="1_siun8"]
-[ext_resource type="PackedScene" uid="uid://hqujxnhibn6h" path="res://tscn/sensor.tscn" id="3_tvejb"]
+[ext_resource type="PackedScene" path="res://tscn/sensor.tscn" id="3_tvejb"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_eq3s0"]
 radius = 40.0
