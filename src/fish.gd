@@ -12,11 +12,11 @@ extends RigidBody2D
 
 var _time := 0.0
 
-#左から順にnoraml, escape, focusへと移る確率をあらわした、行動のテーブル
-var behavior_table := {
-	"random": [0.8, 0, 0.2],
-	"escape": [0.3, 0.7, 0],
-	"focus": [0.33, 0.33, 0.33]
+#左から順にnoraml, focus, escapeへと移る確率をあらわした、行動のテーブル
+var _behavior_table := {
+	"random": [[0.8, random_walk], [0.2, focus_walk], [0, escape_walk]],
+	"escape": [[0.3, random_walk], [0, focus_walk], [0.7, escape_walk]],
+	"focus": [[0.33, random_walk], [0.33, focus_walk], [0.33, escape_walk]]
 }
 
 const utility = preload("res://src/utility.gd")
@@ -29,13 +29,25 @@ func _physics_process(delta):
 		_time += delta
 		if _time >= randi_range(behavior_interval_min, behavior_interval_max):
 			_time = 0
-			
-func random_walk():
+
+func behavior_choice(state: String, table: Dictionary) -> Callable:
+	var p = round(randf_range(0, 1.0))
+	var f: Callable = utility.id
+	#行動の確率がすべて同じであった場合、起きる行動が毎回同じになってしまう。
+	#テーブルの並びをランダムにすることでこれに対応した
+	for percent in table[state].shuffle(): 
+		if p > percent:
+			f = percent[1]
+	
+	return f
+
+#この関数の引数は使わない
+func random_walk(place_holder: Vector2) -> Vector2:
 	return Vector2(randi_range(-1, 1), randi_range(-1, 1))
 
-func focus_walk(target: Vector2):
+func focus_walk(target: Vector2) -> Vector2:
 	return Vector2(transform.origin - target)
 
-func escape_walk(target: Vector2):
+func escape_walk(target: Vector2) -> Vector2:
 	var v = focus_walk(target)
 	return Vector2(-v.y, -v.x)
