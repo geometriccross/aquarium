@@ -5,3 +5,6 @@ static func input_vector():
 	var right = int(Input.is_key_pressed(KEY_D))
 	
 	return Vector2(-left + right, -up + down)
+
+static func id(x):
+	return x

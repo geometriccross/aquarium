@@ -19,12 +19,12 @@ var behavior_table := {
 	"focus": [0.33, 0.33, 0.33]
 }
 
-const control = preload("res://src/control_utility.gd")
+const utility = preload("res://src/utility.gd")
 
 func _physics_process(delta):
 	if manual_control:
-		self.apply_force(control.input_vector() * move_speed, Vector2.ZERO)
-		$"ゆ".flip_h = max(-control.input_vector().x, 0)
+		self.apply_force(utility.input_vector() * move_speed, Vector2.ZERO)
+		$"ゆ".flip_h = max(-utility.input_vector().x, 0)
 	else:
 		_time += delta
 		if _time >= randi_range(behavior_interval_min, behavior_interval_max):
