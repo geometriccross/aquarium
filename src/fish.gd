@@ -30,16 +30,15 @@ func _physics_process(delta):
 		if _time >= randi_range(behavior_interval_min, behavior_interval_max):
 			_time = 0
 
-func behavior_choice(state: String, table: Dictionary) -> Callable:
+func behavior_choice(state: String, table: Dictionary) -> Array:
 	var p = round(randf_range(0, 1.0))
-	var f: Callable = utility.id
+	var result = ["random", utility.id]
 	#行動の確率がすべて同じであった場合、起きる行動が毎回同じになってしまう。
 	#テーブルの並びをランダムにすることでこれに対応した
 	for percent in table[state].shuffle(): 
-		if p > percent:
-			f = percent[1]
-	
-	return f
+		if p > percent: result = percent
+
+	return result
 
 #この関数の引数は使わない
 func random_walk(place_holder: Vector2) -> Vector2:
