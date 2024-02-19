@@ -17,7 +17,7 @@ static func map(f: Callable, array: Array):
 	return result
 
 static func probability_remap(data: Array):
-	data = map(func(x): return x*10, data)
+	data = map(func(x): return x*100, data)
 	data.sort()
 	var acc = 0
 	var i = 0
@@ -27,4 +27,17 @@ static func probability_remap(data: Array):
 		acc += data[i]
 		i += 1
 
-	return map(func(x): return min(x/10, 1.0), data)
+	return map(func(x): return min(x/100, 1.0), data)
+
+static  func probability_remap_with_jag(data: Array):
+	data = map(func(x): return x[0]*100, data)
+	data.sort()
+	var acc = 0
+	var i = 0
+	
+	for x in data:
+		data[i][0] += acc
+		acc += data[i]
+		i += 1
+	
+	return map(func(x): return min(x[0]/100, 1.0), data) 
