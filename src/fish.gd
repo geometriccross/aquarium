@@ -34,9 +34,31 @@ func _physics_process(delta):
 		if _time >= randi_range(behavior_interval_min, behavior_interval_max):
 			var f_and_state = behavior_choice(_state, _behavior_table)
 			#ここのVector2.LEFTは一時的なもの
-			apply_force(f_and_state[0].call(Vector2.LEFT * move_speed), Vector2.ZERO)
+			apply_force(f_and_state[0].call(sensor_perception() * 10), Vector2.ZERO)
 			_state = f_and_state[1]
 			_time = 0
+
+func sensor_perception() -> Vector2:
+	var near_objects = [
+		front.hit_info()["ray_info"]["top"], 
+		front.hit_info()["ray_info"]["mid"], 
+		front.hit_info()["ray_info"]["low"],
+		top.hit_info()["ray_info"]["top"],
+		top.hit_info()["ray_info"]["mid"],
+		top.hit_info()["ray_info"]["low"],
+		low.hit_info()["ray_info"]["top"],
+		low.hit_info()["ray_info"]["mid"],
+		low.hit_info()["ray_info"]["low"],
+	].filter(func(x): return x != null)
+	var length = near_objects.size()
+	
+	var vector = near_objects.reduce(func(accum, v): return accum.position + v.position)
+	if vector is Vector2:
+		return (position - vector) / length
+	else:
+		return Vector2.ZERO
+
+	
 
 func behavior_choice(state: String, table: Dictionary) -> Array:
 	var result = [random_walk, _RANDOM] #もし何も当たらなかった場合に実行される
