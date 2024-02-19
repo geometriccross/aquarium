@@ -8,3 +8,10 @@ static func input_vector():
 
 static func id(x):
 	return x
+
+static func map(f: Callable, array: Array):
+	var result = []
+	for x in array:
+		result.append(f.call(x))
+	
+	return result
