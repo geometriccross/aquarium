@@ -30,6 +30,7 @@ static func probability_remap(data: Array):
 	return map(func(x): return min(x/100, 1.0), data)
 
 static  func probability_remap_with_jag(data: Array):
+	#100掛けるのは桁落ち防止
 	data = map(func(x): return x[0]*100, data)
 	data.sort()
 	var acc = 0
