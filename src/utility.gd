@@ -9,15 +9,7 @@ static func input_vector():
 static func id(x):
 	return x
 
-static func map(f: Callable, array: Array):
-	var result = []
-	for x in array:
-		result.append(f.call(x))
-	
-	return result
-
 static func probability_remap(data: Array):
-	data = map(func(x): return x*100, data)
 	data.sort()
 	var acc = 0
 	var i = 0
@@ -27,18 +19,17 @@ static func probability_remap(data: Array):
 		acc += data[i]
 		i += 1
 
-	return map(func(x): return min(x/100, 1.0), data)
+	return data.map(func(x): return min(x, 1.0))
 
 static  func probability_remap_with_jag(data: Array):
 	#100掛けるのは桁落ち防止
-	data = map(func(x): return x[0]*100, data)
 	data.sort()
 	var acc = 0
 	var i = 0
 	
 	for x in data:
 		data[i][0] += acc
-		acc += data[i]
+		acc += data[i][0]
 		i += 1
 	
-	return map(func(x): return min(x[0]/100, 1.0), data) 
+	return data.map(func(x): return min(x[0], 1.0))
