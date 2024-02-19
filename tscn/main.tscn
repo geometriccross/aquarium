@@ -9,6 +9,6 @@ position = Vector2(562, 285)
 gravity_scale = 0.0
 
 [node name="fish2" parent="." instance=ExtResource("1_otopm")]
-position = Vector2(790, 285)
+position = Vector2(562, 285)
 gravity_scale = 0.0
 manual_control = false

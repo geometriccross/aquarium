@@ -14,33 +14,37 @@ var _time := 0.0
 var _RANDOM = "random"
 var _ESCAPE = "escape"
 var _FOCUS = "focus"
+var _state = _RANDOM
 
 #左から順にnoraml, focus, escapeへと移る確率をあらわした、行動のテーブル
 var _behavior_table := {
-	_RANDOM: [[0.8, random_walk], [0.2, focus_walk], [0, escape_walk]],
-	_ESCAPE: [[0.3, random_walk], [0, focus_walk], [0.7, escape_walk]],
-	_FOCUS: [[0.33, random_walk], [0.33, focus_walk], [0.33, escape_walk]]
+	_RANDOM: [[0.8, random_walk, _RANDOM], [0.2, focus_walk, _FOCUS], [0, escape_walk, _ESCAPE]],
+	_ESCAPE: [[0.3, random_walk, _RANDOM], [0, focus_walk, _FOCUS], [0.7, escape_walk, _ESCAPE]],
+	_FOCUS: [[0.33, random_walk, _RANDOM], [0.33, focus_walk, _FOCUS], [0.33, escape_walk, _ESCAPE]]
 }
 
 const utility = preload("res://src/utility.gd")
 
 func _physics_process(delta):
 	if manual_control:
-		self.apply_force(utility.input_vector() * move_speed, Vector2.ZERO)
+		apply_force(utility.input_vector() * move_speed, Vector2.ZERO)
 		$"ゆ".flip_h = max(-utility.input_vector().x, 0)
 	else:
 		_time += delta
 		if _time >= randi_range(behavior_interval_min, behavior_interval_max):
+			var f_and_state = behavior_choice(_state, _behavior_table)
+			#ここのVector2.LEFTは一時的なもの
+			apply_force(f_and_state[0].call(Vector2.LEFT * move_speed), Vector2.ZERO)
+			_state = f_and_state[1]
 			_time = 0
 
 func behavior_choice(state: String, table: Dictionary) -> Array:
-	var p = round(randf_range(0, 1.0))
-	var result = [_RANDOM, utility.id]
-	#行動の確率がすべて同じであった場合、起きる行動が毎回同じになってしまう。
-	#テーブルの並びをランダムにすることでこれに対応した
-	for percent in table[state].shuffle(): 
-		if p > percent: result = percent
+	var result = [random_walk, _RANDOM] #もし何も当たらなかった場合に実行される
+	for p_and_f in table[state]:
+		if p_and_f[0] > round(randf_range(0, 1.0)):
+			result = [p_and_f[1], p_and_f[2]]
 
+	print(result)
 	return result
 
 #この関数の引数は使わない
