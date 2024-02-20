@@ -5,8 +5,8 @@ extends RigidBody2D
 @onready var low := $low_sensor
 
 @export var manual_control := true
-@export var behavior_interval_max := 3
-@export var behavior_interval_min := 1
+@export var behavior_interval_max := 3.0
+@export var behavior_interval_min := 1.0
 
 @export var move_speed := 400
 
@@ -18,9 +18,9 @@ var _state = _RANDOM
 
 #左から順にnoraml, focus, escapeへと移る確率をあらわした、行動のテーブル
 var _behavior_table := {
-	_RANDOM: [[0.8, random_walk, _RANDOM], [0.2, focus_walk, _FOCUS], [0, escape_walk, _ESCAPE]],
-	_ESCAPE: [[0.3, random_walk, _RANDOM], [0, focus_walk, _FOCUS], [0.7, escape_walk, _ESCAPE]],
-	_FOCUS: [[0.33, random_walk, _RANDOM], [0.33, focus_walk, _FOCUS], [0.33, escape_walk, _ESCAPE]]
+	_RANDOM: [[0.6, random_walk, _RANDOM], [0.2, focus_walk, _FOCUS], [0, escape_walk, _ESCAPE]],
+	_ESCAPE: [[0.3, random_walk, _RANDOM], [0.2, focus_walk, _FOCUS], [0.5, escape_walk, _ESCAPE]],
+	_FOCUS: [[0.2, random_walk, _RANDOM], [0.5, focus_walk, _FOCUS], [0.3, escape_walk, _ESCAPE]]
 }
 
 const utility = preload("res://src/utility.gd")
