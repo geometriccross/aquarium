@@ -55,8 +55,14 @@ func sensor_perception() -> Vector2:
 			int(ray.hit_info()["ray_info"]["low"] != null) 
 		)
 	)
-
-	return Vector2(ray_num.call(front), -ray_num.call(top) + ray_num.call(low))
+	
+	var area_num = func(area): return int(area.hit_info()["entered_info"] != null)
+	
+	#エリアにものを検知したら、その方向とは反対向きの値を加える
+	return Vector2(
+		ray_num.call(front) + -area_num.call(front),
+		-ray_num.call(top) + area_num.call(top) + ray_num.call(low) + -area_num.call(low)
+	)
 
 func behavior_choice(state: String, table: Dictionary) -> Array:
 	var p = randf_range(0.0, 1.0)
