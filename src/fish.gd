@@ -17,7 +17,6 @@ var _FOCUS = "focus"
 var _IDLE = "idle"
 var _state = _RANDOM
 
-#左から順にnoraml, focus, escapeへと移る確率をあらわした、行動のテーブル
 var _behavior_table := {
 	_RANDOM: 	[[0.4, utility.id, _IDLE], [0.5, random_walk, _RANDOM], [0.1, focus_walk, _FOCUS], [0, escape_walk, _ESCAPE]],
 	_IDLE: 		[[0.3, utility.id, _IDLE], [0.7, random_walk, _RANDOM], [0, focus_walk, _FOCUS], [0, escape_walk, _ESCAPE]],
@@ -73,7 +72,7 @@ func behavior_choice(state: String, table: Dictionary) -> Array:
 		if p_and_f[0] > p:
 			result = [p_and_f[1], p_and_f[2]]
 
-	print(result, ", ", p)
+	print(state, ", ", p)
 	return result
 
 #この関数の引数は使わない
