@@ -9,8 +9,11 @@ radius = 40.0
 height = 92.0
 
 [node name="fish" type="RigidBody2D"]
-gravity_scale = 0.06
+gravity_scale = 0.0
 script = ExtResource("1_nmrwm")
+behavior_interval_max = 0.5
+behavior_interval_min = 0.1
+move_speed = 700
 
 [node name="ゆ" type="Sprite2D" parent="."]
 texture = ExtResource("1_siun8")

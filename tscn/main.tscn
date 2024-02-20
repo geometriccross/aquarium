@@ -1,23 +1,24 @@
-[gd_scene load_steps=3 format=3 uid="uid://ct5qu3seilaqx"]
+[gd_scene load_steps=4 format=3 uid="uid://ct5qu3seilaqx"]
 
 [ext_resource type="PackedScene" uid="uid://ytk41imemgoh" path="res://tscn/fish.tscn" id="1_otopm"]
 [ext_resource type="PackedScene" uid="uid://bmatqbu07rytq" path="res://tscn/wall_block.tscn" id="2_e3j88"]
+[ext_resource type="PackedScene" uid="uid://bta2txbet7l6f" path="res://tscn/spawner.tscn" id="2_rlnsw"]
 
 [node name="main" type="Node2D"]
 
 [node name="fish" parent="." instance=ExtResource("1_otopm")]
 position = Vector2(562, 285)
-gravity_scale = 0.0
 behavior_interval_max = 1.0
 behavior_interval_min = 0.2
 
 [node name="fish2" parent="." instance=ExtResource("1_otopm")]
 position = Vector2(369, 285)
-gravity_scale = 0.0
 manual_control = false
 behavior_interval_max = 1.0
 behavior_interval_min = 0.2
 move_speed = 500
+
+[node name="spawner" parent="." instance=ExtResource("2_rlnsw")]
 
 [node name="wall" type="Node2D" parent="."]
 
