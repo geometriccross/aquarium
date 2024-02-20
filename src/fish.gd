@@ -14,13 +14,15 @@ var _time := 0.0
 var _RANDOM = "random"
 var _ESCAPE = "escape"
 var _FOCUS = "focus"
+var _IDLE = "idle"
 var _state = _RANDOM
 
 #左から順にnoraml, focus, escapeへと移る確率をあらわした、行動のテーブル
 var _behavior_table := {
-	_RANDOM: [[0.6, random_walk, _RANDOM], [0.2, focus_walk, _FOCUS], [0, escape_walk, _ESCAPE]],
-	_ESCAPE: [[0.3, random_walk, _RANDOM], [0.2, focus_walk, _FOCUS], [0.5, escape_walk, _ESCAPE]],
-	_FOCUS: [[0.2, random_walk, _RANDOM], [0.5, focus_walk, _FOCUS], [0.3, escape_walk, _ESCAPE]]
+	_RANDOM: 	[[0.4, utility.id, _IDLE], [0.5, random_walk, _RANDOM], [0.1, focus_walk, _FOCUS], [0, escape_walk, _ESCAPE]],
+	_IDLE: 		[[0.3, utility.id, _IDLE], [0.7, random_walk, _RANDOM], [0, focus_walk, _FOCUS], [0, escape_walk, _ESCAPE]],
+	_ESCAPE: 	[[0.1, utility.id, _IDLE], [0.2, random_walk, _RANDOM], [0.2, focus_walk, _FOCUS], [0.5, escape_walk, _ESCAPE]],
+	_FOCUS: 	[[0.2, utility.id, _IDLE], [0.2, random_walk, _RANDOM], [0.4, focus_walk, _FOCUS], [0.2, escape_walk, _ESCAPE]]
 }
 
 const utility = preload("res://src/utility.gd")
@@ -66,7 +68,7 @@ func sensor_perception() -> Vector2:
 
 func behavior_choice(state: String, table: Dictionary) -> Array:
 	var p = randf_range(0.0, 1.0)
-	var result = [random_walk, _RANDOM] #もし何も当たらなかった場合に実行される
+	var result = [utility.id, _IDLE] #もし何も当たらなかった場合に実行される
 	for p_and_f in table[state]:
 		if p_and_f[0] > p:
 			result = [p_and_f[1], p_and_f[2]]
