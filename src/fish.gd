@@ -49,14 +49,14 @@ func image_flip(flip_index):
 		$"ゆ".flip_h = true
 
 func sensor_perception() -> Vector2:
-	var vector_num = func(ray): return ((
+	var ray_num = func(ray): return ((
 			int(ray.hit_info()["ray_info"]["top"] != null) + 
 			int(ray.hit_info()["ray_info"]["mid"] != null) + 
 			int(ray.hit_info()["ray_info"]["low"] != null) 
 		)
 	)
 
-	return Vector2(vector_num.call(front), -vector_num.call(top) + vector_num.call(low))
+	return Vector2(ray_num.call(front), -ray_num.call(top) + ray_num.call(low))
 
 func behavior_choice(state: String, table: Dictionary) -> Array:
 	var p = randf_range(0.0, 1.0)
