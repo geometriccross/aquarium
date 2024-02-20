@@ -31,33 +31,23 @@ func _physics_process(delta):
 		$"ゆ".flip_h = max(-utility.input_vector().x, 0)
 	else:
 		_time += delta
-		if _time >= randi_range(behavior_interval_min, behavior_interval_max):
+		if _time >= randf_range(behavior_interval_min, behavior_interval_max):
 			var f_and_state = behavior_choice(_state, _behavior_table)
-			#ここのVector2.LEFTは一時的なもの
-			apply_force(f_and_state[0].call(sensor_perception() * 10), Vector2.ZERO)
+			apply_force(f_and_state[0].call(sensor_perception()) * 2, Vector2.ZERO)
 			_state = f_and_state[1]
 			_time = 0
 
 func sensor_perception() -> Vector2:
-	var near_objects = [
-		front.hit_info()["ray_info"]["top"], 
-		front.hit_info()["ray_info"]["mid"], 
-		front.hit_info()["ray_info"]["low"],
-		top.hit_info()["ray_info"]["top"],
-		top.hit_info()["ray_info"]["mid"],
-		top.hit_info()["ray_info"]["low"],
-		low.hit_info()["ray_info"]["top"],
-		low.hit_info()["ray_info"]["mid"],
-		low.hit_info()["ray_info"]["low"],
-	].filter(func(x): return x != null)
-	var length = near_objects.size()
+	var vector_num = func(ray): return ((
+			int(ray.hit_info()["ray_info"]["top"] != null)*0.5 + 
+			int(ray.hit_info()["ray_info"]["mid"] != null) + 
+			int(ray.hit_info()["ray_info"]["low"] != null)*0.5
+		) / 2
+	)
 	
-	var vector = near_objects.reduce(func(accum, v): return accum.position + v.position)
-	if vector is Vector2:
-		return (position - vector) / length
-	else:
-		return Vector2.ZERO
-
+	var v = Vector2(vector_num.call(front), vector_num.call(low))
+	print(v)
+	return v
 	
 
 func behavior_choice(state: String, table: Dictionary) -> Array:
@@ -73,9 +63,9 @@ func behavior_choice(state: String, table: Dictionary) -> Array:
 func random_walk(place_holder: Vector2) -> Vector2:
 	return Vector2(randi_range(-1, 1), randi_range(-1, 1))
 
+#そのままでも対象へと向かうベクトルになっているため、値をそのまま返す
 func focus_walk(target: Vector2) -> Vector2:
-	return Vector2(transform.origin - target)
+	return target
 
 func escape_walk(target: Vector2) -> Vector2:
-	var v = focus_walk(target)
-	return Vector2(-v.y, -v.x)
+	return Vector2(-target.y, -target.x)
