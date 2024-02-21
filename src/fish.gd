@@ -9,6 +9,7 @@ extends RigidBody2D
 @export var behavior_interval_min := 1.0
 
 @export var move_speed := 400
+@export var flip_bound := 0.5
 
 const utility = preload("res://src/utility.gd")
 const state = preload("res://src/state.gd")
@@ -20,7 +21,7 @@ func _physics_process(delta):
 	global_rotation = 0 #回転を固定
 	if manual_control:
 		apply_force(utility.input_vector() * move_speed, Vector2.ZERO)
-		image_flip(utility.input_vector().x)
+		image_flip(utility.input_vector(), flip_bound)
 
 	else:
 		_time += delta
@@ -29,16 +30,16 @@ func _physics_process(delta):
 			var dest_vector = fish_state.destination_vector(sensor_perception())
 
 			apply_force(dest_vector * move_speed * 2, Vector2.ZERO)
-			image_flip(dest_vector.x)
+			image_flip(dest_vector, flip_bound)
 	
 			_state = fish_state
 			_time = 0
 
-func image_flip(flip_index):
-	#ちょうど0の時には、何もせずそのままの向きを保つ
-	if flip_index > 0:
+func image_flip(vector: Vector2, threshold: float = 0.1):
+	#左右へ向かうベクトルの大きさが一定以上なら、向きを変える
+	if vector.x > threshold:
 		$"ゆ".flip_h = false
-	elif flip_index < 0:
+	elif vector.x < -threshold:
 		$"ゆ".flip_h = true
 
 func sensor_perception() -> Vector2:
