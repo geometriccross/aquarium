@@ -10,21 +10,11 @@ extends RigidBody2D
 
 @export var move_speed := 400
 
-var _time := 0.0
-var _RANDOM = "random"
-var _ESCAPE = "escape"
-var _FOCUS = "focus"
-var _IDLE = "idle"
-var _state = _RANDOM
-
-var _behavior_table := {
-	_RANDOM: 	[[0.4, utility.id, _IDLE], [0.5, random_walk, _RANDOM], [0.1, focus_walk, _FOCUS], [0, escape_walk, _ESCAPE]],
-	_IDLE: 		[[0.3, utility.id, _IDLE], [0.7, random_walk, _RANDOM], [0, focus_walk, _FOCUS], [0, escape_walk, _ESCAPE]],
-	_ESCAPE: 	[[0.1, utility.id, _IDLE], [0.2, random_walk, _RANDOM], [0.2, focus_walk, _FOCUS], [0.5, escape_walk, _ESCAPE]],
-	_FOCUS: 	[[0.2, utility.id, _IDLE], [0.2, random_walk, _RANDOM], [0.4, focus_walk, _FOCUS], [0.2, escape_walk, _ESCAPE]]
-}
-
 const utility = preload("res://src/utility.gd")
+const state = preload("res://src/state.gd")
+
+var _time := 0.0
+var _state = state.Idle
 
 func _physics_process(delta):
 	global_rotation = 0 #回転を固定
@@ -35,11 +25,13 @@ func _physics_process(delta):
 	else:
 		_time += delta
 		if _time >= randf_range(behavior_interval_min, behavior_interval_max):
-			var f_and_state = behavior_choice(_state, _behavior_table)
-			var vector = f_and_state[0].call(sensor_perception())
-			apply_force(vector * move_speed * 2, Vector2.ZERO)
-			image_flip(vector.x)
-			_state = f_and_state[1]
+			var fish_state = behavior_choice(_state, state.table())
+			var dest_vector = fish_state.destination_vector(sensor_perception())
+
+			apply_force(dest_vector * move_speed * 2, Vector2.ZERO)
+			image_flip(dest_vector.x)
+	
+			_state = fish_state
 			_time = 0
 
 func image_flip(flip_index):
@@ -65,23 +57,11 @@ func sensor_perception() -> Vector2:
 		-ray_num.call(top) + area_num.call(top) + ray_num.call(low) + -area_num.call(low)
 	)
 
-func behavior_choice(state: String, table: Dictionary) -> Array:
-	var p = randf_range(0.0, 1.0)
-	var result = [utility.id, _IDLE] #もし何も当たらなかった場合に実行される
-	for p_and_f in table[state]:
-		if p_and_f[0] > p:
-			result = [p_and_f[1], p_and_f[2]]
+func behavior_choice(fish_state, table: Dictionary):
+	var result := state.Idle #もし何も当たらなかった場合に実行される
+	for value in table[fish_state.mnemonic()]:
+		if value[0] > randf_range(0.0, 1.0):
+			result = value[1]
 
-	print(state, ", ", p)
+	print(result.mnemonic())
 	return result
-
-#この関数の引数は使わない
-func random_walk(place_holder: Vector2) -> Vector2:
-	return Vector2(randi_range(-1, 1), randi_range(-1, 1))
-
-#そのままでも対象へと向かうベクトルになっているため、値をそのまま返す
-func focus_walk(target: Vector2) -> Vector2:
-	return target
-
-func escape_walk(target: Vector2) -> Vector2:
-	return Vector2(-target.y, -target.x)
